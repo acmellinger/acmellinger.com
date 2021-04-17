@@ -46,6 +46,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   overflow: hidden;
   outline: none;
+  padding: 0px;
 `;
 
 const IconDiv = styled.div`
