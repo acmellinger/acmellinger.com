@@ -83,7 +83,7 @@ const Links = ({ email, error, recaptchaRef }: LinksProps) => {
           aria-label="My LinkedIn"
           target="_blank"
           rel="noopener noreferrer"
-          href={process.env.REACT_APP_LINKEDIN}
+          href={import.meta.env.VITE_LINKEDIN}
         >
           <StyledLinkedIn />
         </a>
@@ -92,7 +92,7 @@ const Links = ({ email, error, recaptchaRef }: LinksProps) => {
           aria-label="My Github"
           target="_blank"
           rel="noopener noreferrer"
-          href={process.env.REACT_APP_GITHUB}
+          href={import.meta.env.VITE_GITHUB}
         >
           <StyledGithub />
         </a>
