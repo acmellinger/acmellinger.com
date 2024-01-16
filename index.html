@@ -53,7 +53,6 @@
           var newElement = document.createElement("a");
           const rjson = await response.json();
           const email = rjson["email"];
-          console.log(await response.json());
           newElement.setAttribute(
             "href",
             "mailto:" + email + "?subject=Website Contact"
