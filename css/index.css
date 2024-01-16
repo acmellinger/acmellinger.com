@@ -16,7 +16,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #1a222c;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -59,7 +59,7 @@ button {
   color: #fff;
   width: 20px !important;
   height: 20px;
-  font-size: 20px;
+  /* font-size: 20px; */
   padding: 10px;
   margin: 5px;
   transition: all 0.5s;
@@ -114,6 +114,15 @@ h2 {
   margin: 0;
   color: #fff;
 }
+
+.wait-for-icons {
+  display: none;
+}
+
+.fontawesome-i2svg-active .wait-for-icons {
+  display: initial;
+}
+
 @media only screen and (min-width: 768px) {
   h1 {
     margin-top: 0;
