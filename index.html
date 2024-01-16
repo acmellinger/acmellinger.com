@@ -51,12 +51,13 @@
         var mydiv = document.getElementById("email");
         if (answer.status == 200) {
           var newElement = document.createElement("a");
+          const email = await answer.text();
           newElement.setAttribute(
             "href",
-            "mailto:" + answer.text() + "?subject=Website Contact"
+            "mailto:" + email + "?subject=Website Contact"
           );
           newElement.setAttribute("class", "emailtext");
-          newElement.innerText = answer.text();
+          newElement.innerText = email;
           mydiv.appendChild(newElement);
         } else {
           var newElement = document.createElement("p");
