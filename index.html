@@ -53,10 +53,10 @@
           var newElement = document.createElement("a");
           newElement.setAttribute(
             "href",
-            "mailto:" + answer.text + "?subject=Website Contact"
+            "mailto:" + answer.text() + "?subject=Website Contact"
           );
           newElement.setAttribute("class", "emailtext");
-          newElement.innerText = answer.text;
+          newElement.innerText = answer.text();
           mydiv.appendChild(newElement);
         } else {
           var newElement = document.createElement("p");
