@@ -52,6 +52,7 @@
         if (response.status == 200) {
           var newElement = document.createElement("a");
           const email = await response.json()["email"];
+          console.log(response.json());
           newElement.setAttribute(
             "href",
             "mailto:" + email + "?subject=Website Contact"
