@@ -35,7 +35,7 @@
         grecaptcha.execute();
       }
       async function onRecaptcha(token) {
-        var answer = await fetch(
+        var response = await fetch(
           "https://email-hider-xhbobd465a-uc.a.run.app",
           {
             method: "POST",
@@ -49,9 +49,9 @@
           }
         );
         var mydiv = document.getElementById("email");
-        if (answer.status == 200) {
+        if (response.status == 200) {
           var newElement = document.createElement("a");
-          const email = await answer.text();
+          const email = await response.json()[email];
           newElement.setAttribute(
             "href",
             "mailto:" + email + "?subject=Website Contact"
