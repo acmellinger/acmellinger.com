@@ -51,8 +51,8 @@
         var mydiv = document.getElementById("email");
         if (response.status == 200) {
           var newElement = document.createElement("a");
-          //const email = await response.json()["email"];
-          const email = "test";
+          const rjson = await response.json();
+          const email = rjson["email"];
           console.log(await response.json());
           newElement.setAttribute(
             "href",
