@@ -4,8 +4,6 @@ interface Props {
 }
 
 const { title } = Astro.props;
-
-import "@fortawesome/fontawesome-svg-core/styles.css";
 ---
 
 <!doctype html>
@@ -24,23 +22,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
     <slot />
   </body>
 </html>
-<script>
-  // import the required functions and icons
-  import { library, config, dom } from "@fortawesome/fontawesome-svg-core";
-  import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-  import { faLinkedin, faGithub } from "@fortawesome/free-brands-svg-icons";
 
-  // since we want astro to handle the css we should disable automatic css injection on the client
-  // this is similar to other ssr frameworks like next.js or nuxt
-  config.autoAddCss = false;
-
-  // create a subset of icons that you are going to use so
-  // astro is able to tree shake and optimize the javascript bundle for best performance
-  library.add(faEnvelope, faLinkedin, faGithub);
-
-  // replace the unprocessed icons with the svg and watch for additional icons
-  dom.watch();
-</script>
 <script is:inline src="https://www.google.com/recaptcha/api.js" async defer
 ></script>
 <style is:global>
@@ -50,7 +32,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 
     color-scheme: light dark;
     color: rgba(255, 255, 255, 0.87);
-    background-color: #fefcf7;
+    background-color: #f1f5f9;
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
