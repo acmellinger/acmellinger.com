@@ -33,114 +33,114 @@ const { linkedin, github, url, mysite } = Astro.props;
         <Icon name="mdi:github" class="icon" /></a
       >
     </a>
-    <div id="email" class="email">
-      &nbsp;
-      <a id="emailtext" class="emailtext"></a>
-      <p id="errortext" class="errortext">&nbsp;</p>
-    </div>
-
-    <script is:inline define:vars={{ url, mysite }}>
-      window.onRecaptcha = async function onRecaptcha(token) {
-        console.log(url);
-        var response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            token: token,
-            site: mysite,
-          }),
-        });
-        if (response.status == 200) {
-          var anchorElement = document.getElementById("emailtext");
-          const rjson = await response.json();
-          const email = rjson["email"];
-          anchorElement.setAttribute(
-            "href",
-            "mailto:" + email + "?subject=Website Contact",
-          );
-          anchorElement.innerText = email;
-        } else {
-          var paraElement = document.getElementById("errortext");
-          paraElement.innerText = "CAPTCHA Failed";
-        }
-      };
-    </script>
-    <script>
-      function onEmailClick() {
-        grecaptcha.execute();
-      }
-      const button = document.getElementById("emailBtn");
-
-      button!.addEventListener("click", onEmailClick);
-    </script>
-    <style>
-      button {
-        background-color: Transparent;
-        background-repeat: no-repeat;
-        border: none;
-        cursor: pointer;
-        overflow: hidden;
-        outline: none;
-        padding: 0;
-        text-align: center;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .links {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        gap: 0;
-      }
-
-      .links > * {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      :global(.icon) {
-        display: block;
-        text-align: center;
-        color: #141437;
-        width: 30px;
-        height: 30px;
-        padding: 10px;
-        margin: 5px;
-        transition: all 0.5s;
-      }
-
-      :global(.icon:hover) {
-        opacity: 0.5;
-      }
-
-      :global(.icon:active) {
-        opacity: 0.5;
-      }
-
-      .emailtext {
-        text-decoration: underline;
-        margin: 0;
-        color: #141437;
-      }
-
-      .emailerror {
-        display: inline;
-        margin: 0;
-        color: #141437;
-      }
-
-      @media only screen and (min-width: 768px) {
-        :global(.icon) {
-          width: 40px;
-          height: 40px;
-        }
-      }
-    </style>
   </a>
 </div>
+<div id="email" class="email">
+  &nbsp;
+  <a id="emailtext" class="emailtext"></a>
+  <p id="errortext" class="errortext">&nbsp;</p>
+</div>
+
+<script is:inline define:vars={{ url, mysite }}>
+  window.onRecaptcha = async function onRecaptcha(token) {
+    console.log(url);
+    var response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+        site: mysite,
+      }),
+    });
+    if (response.status == 200) {
+      var anchorElement = document.getElementById("emailtext");
+      const rjson = await response.json();
+      const email = rjson["email"];
+      anchorElement.setAttribute(
+        "href",
+        "mailto:" + email + "?subject=Website Contact",
+      );
+      anchorElement.innerText = email;
+    } else {
+      var paraElement = document.getElementById("errortext");
+      paraElement.innerText = "CAPTCHA Failed";
+    }
+  };
+</script>
+<script>
+  function onEmailClick() {
+    grecaptcha.execute();
+  }
+  const button = document.getElementById("emailBtn");
+
+  button!.addEventListener("click", onEmailClick);
+</script>
+<style>
+  button {
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    padding: 0;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+  }
+
+  .links > * {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :global(.icon) {
+    display: block;
+    text-align: center;
+    color: #141437;
+    width: 30px;
+    height: 30px;
+    padding: 10px;
+    margin: 5px;
+    transition: all 0.5s;
+  }
+
+  :global(.icon:hover) {
+    opacity: 0.5;
+  }
+
+  :global(.icon:active) {
+    opacity: 0.5;
+  }
+
+  .emailtext {
+    text-decoration: underline;
+    margin: 0;
+    color: #141437;
+  }
+
+  .emailerror {
+    display: inline;
+    margin: 0;
+    color: #141437;
+  }
+
+  @media only screen and (min-width: 768px) {
+    :global(.icon) {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
