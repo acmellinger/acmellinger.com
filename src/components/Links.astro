@@ -52,10 +52,8 @@ const { linkedin, github, url, mysite } = Astro.props;
         const rjson = await response.json();
         const email = rjson["email"];
 
-        // 1. Clear status text first
         document.getElementById("statustext").innerText = "";
 
-        // 2. Set Email text
         var anchorElement = document.getElementById("emailtext");
         anchorElement.setAttribute(
           "href",
@@ -78,10 +76,8 @@ const { linkedin, github, url, mysite } = Astro.props;
   function onEmailClick() {
     const statusText = document.getElementById("statustext");
 
-    // Clear any old email if they click again
     document.getElementById("emailtext")!.innerText = "";
 
-    // Show verifying text immediately
     if (statusText) statusText.innerText = "Verifying...";
 
     if (typeof turnstile !== "undefined") {
@@ -94,7 +90,6 @@ const { linkedin, github, url, mysite } = Astro.props;
 </script>
 
 <style>
-  /* ... your existing button/icon styles ... */
   button {
     background-color: Transparent;
     background-repeat: no-repeat;
@@ -149,34 +144,27 @@ const { linkedin, github, url, mysite } = Astro.props;
     }
   }
 
-  /* --- NEW STYLES BELOW --- */
-
   .email-container {
-    /* Fixed height reserves space so layout doesn't jump */
     height: 1.5rem;
 
-    /* Flexbox centers the content perfectly */
     display: flex;
     justify-content: center;
     align-items: center;
 
-    /* Ensure text is centered */
     text-align: center;
     width: 100%;
-    margin-top: 10px; /* Optional spacing from icons */
+    margin-top: 10px;
   }
 
   .emailtext {
     text-decoration: underline;
     color: #141437;
-    /* Ensure it doesn't break layout */
     line-height: 1;
   }
 
   .statustext {
     color: #141437;
     font-size: 0.9em;
-    /* Ensure it doesn't break layout */
     line-height: 1;
   }
 </style>
