@@ -22,19 +22,18 @@ const { linkedin, github, url, mysite } = Astro.props;
     href={linkedin}
   >
     <Icon name="mdi:linkedin" class="icon" />
-    <a>
-      <a
-        title="My Github"
-        aria-label="My Github"
-        target="_blank"
-        rel="noopener noreferrer"
-        href={github}
-      >
-        <Icon name="mdi:github" class="icon" /></a
-      >
-    </a>
+  </a>
+  <a
+    title="My Github"
+    aria-label="My Github"
+    target="_blank"
+    rel="noopener noreferrer"
+    href={github}
+  >
+    <Icon name="mdi:github" class="icon" />
   </a>
 </div>
+
 <div id="email" class="email">
   &nbsp;
   <a id="emailtext" class="emailtext"></a>
@@ -42,41 +41,69 @@ const { linkedin, github, url, mysite } = Astro.props;
 </div>
 
 <script is:inline define:vars={{ url, mysite }}>
-  window.onRecaptcha = async function onRecaptcha(token) {
-    console.log(url);
-    var response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        token: token,
-        site: mysite,
-      }),
-    });
-    if (response.status == 200) {
-      var anchorElement = document.getElementById("emailtext");
-      const rjson = await response.json();
-      const email = rjson["email"];
-      anchorElement.setAttribute(
-        "href",
-        "mailto:" + email + "?subject=Website Contact",
-      );
-      anchorElement.innerText = email;
-    } else {
+  // This function is called automatically by Cloudflare when the challenge is solved
+  window.onTurnstileSuccess = async function (token) {
+    console.log("Challenge solved. Verifying token...");
+
+    // Clear previous errors
+    document.getElementById("errortext").innerText = "Verifying...";
+
+    try {
+      var response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          // Capitalized to match the Worker
+          Token: token,
+          Site: mysite,
+        }),
+      });
+
+      if (response.status === 200) {
+        var anchorElement = document.getElementById("emailtext");
+        const rjson = await response.json();
+        const email = rjson["email"];
+
+        anchorElement.setAttribute(
+          "href",
+          "mailto:" + email + "?subject=Website Contact",
+        );
+        anchorElement.innerText = email;
+        document.getElementById("errortext").innerText = "";
+      } else {
+        throw new Error("Validation failed");
+      }
+    } catch (e) {
       var paraElement = document.getElementById("errortext");
-      paraElement.innerText = "CAPTCHA Failed";
+      paraElement.innerText = "Verification Failed. Try again.";
+      console.error(e);
+      // Reset widget so they can click the button again
+      if (window.turnstile) window.turnstile.reset("#turnstile-widget");
     }
   };
 </script>
-<script>
-  function onEmailClick() {
-    grecaptcha.execute();
-  }
-  const button = document.getElementById("emailBtn");
 
-  button!.addEventListener("click", onEmailClick);
+<script>
+  // 1. Tell TypeScript that 'turnstile' is a global variable
+  declare const turnstile: any;
+
+  function onEmailClick() {
+    // Check if the global variable exists before using it
+    if (typeof turnstile !== "undefined") {
+      turnstile.execute("#turnstile-widget");
+    } else {
+      console.error("Turnstile not loaded yet");
+    }
+  }
+
+  const button = document.getElementById("emailBtn");
+  if (button) {
+    button.addEventListener("click", onEmailClick);
+  }
 </script>
+
 <style>
   button {
     background-color: Transparent;
