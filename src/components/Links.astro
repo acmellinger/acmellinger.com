@@ -41,12 +41,9 @@ const { linkedin, github, url, mysite } = Astro.props;
 </div>
 
 <script is:inline define:vars={{ url, mysite }}>
-  // This function is called automatically by Cloudflare when the challenge is solved
   window.onTurnstileSuccess = async function (token) {
-    console.log("Challenge solved. Verifying token...");
-
-    // Clear previous errors
-    document.getElementById("errortext").innerText = "Verifying...";
+    // Optional: Update text to show the next step is happening
+    // document.getElementById("errortext").innerText = "Decrypting...";
 
     try {
       var response = await fetch(url, {
@@ -55,7 +52,6 @@ const { linkedin, github, url, mysite } = Astro.props;
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          // Capitalized to match the Worker
           Token: token,
           Site: mysite,
         }),
@@ -79,22 +75,24 @@ const { linkedin, github, url, mysite } = Astro.props;
       var paraElement = document.getElementById("errortext");
       paraElement.innerText = "Verification Failed. Try again.";
       console.error(e);
-      // Reset widget so they can click the button again
       if (window.turnstile) window.turnstile.reset("#turnstile-widget");
     }
   };
 </script>
 
 <script>
-  // 1. Tell TypeScript that 'turnstile' is a global variable
   declare const turnstile: any;
 
   function onEmailClick() {
-    // Check if the global variable exists before using it
+    // 1. UPDATE UI HERE (Immediately on click)
+    const statusText = document.getElementById("errortext");
+    if (statusText) statusText.innerText = "Verifying...";
+
     if (typeof turnstile !== "undefined") {
       turnstile.execute("#turnstile-widget");
     } else {
       console.error("Turnstile not loaded yet");
+      if (statusText) statusText.innerText = "Error loading security check.";
     }
   }
 
