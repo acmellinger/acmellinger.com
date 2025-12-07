@@ -18,15 +18,15 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <meta
       http-equiv="Content-Security-Policy"
-      content="
-    default-src 'self'; 
-    script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com blob:; 
-    style-src 'self' 'unsafe-inline'; 
-    frame-src 'self' https://challenges.cloudflare.com; 
-    connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com; 
-    worker-src 'self' blob:; 
-    img-src 'self' data:;
-  "
+      content={`
+        default-src 'self'; 
+        script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://static.cloudflareinsights.com blob:; 
+        style-src 'self' 'unsafe-inline'; 
+        frame-src 'self' https://challenges.cloudflare.com; 
+        connect-src 'self' https://challenges.cloudflare.com https://cloudflareinsights.com ${import.meta.env.URL}; 
+        worker-src 'self' blob:; 
+        img-src 'self' data:;
+      `}
     />
     <title>{title}</title>
   </head>
