@@ -127,7 +127,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
       }
 
       setEmail(email);
-      setStatus("Verified");
+      setStatus("");
     } catch (e) {
       setStatus("Verification failed");
       if (window.turnstile) {
@@ -285,6 +285,10 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .statustext:empty {
+    display: none;
   }
 
   .turnstile {
