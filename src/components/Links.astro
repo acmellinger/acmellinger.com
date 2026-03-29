@@ -16,7 +16,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 
 <div class="links-wrap">
   <nav class="links" role="group" aria-label="Primary links">
-    <button title="Reveal Email" aria-label="Reveal Email" id="emailBtn" class="action">
+    <button aria-label="Reveal Email" id="emailBtn" class="action">
       <Icon name="mdi:email-fast-outline" class="icon" />
       <span>Email</span>
     </button>
@@ -34,7 +34,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     <a
       class="action"
       title="GitHub"
-      aria-label="My Github"
+      aria-label="My GitHub"
       target="_blank"
       rel="noopener noreferrer"
       href={github}
