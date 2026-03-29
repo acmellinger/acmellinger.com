@@ -15,7 +15,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 ---
 
 <div class="links-wrap">
-  <nav class="links" aria-label="Primary links">
+  <nav class="links" role="group" aria-label="Primary links">
     <button title="Reveal Email" aria-label="Reveal Email" id="emailBtn" class="action">
       <Icon name="mdi:email-fast-outline" class="icon" />
       <span>Email</span>
@@ -45,7 +45,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
   </nav>
 
   <div id="email-container" class="email-container" aria-live="polite">
-    <a id="emailtext" class="emailtext"></a>
+    <a id="emailtext" class="emailtext" tabindex="-1"></a>
     <span id="statustext" class="statustext"></span>
   </div>
 </div>
@@ -61,7 +61,10 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 >
 </div>
 
-<script is:inline define:vars={{ url, mysite, localBypassEnabled, localTestEmail, sitekey }}>
+<script
+  is:inline
+  define:vars={{ url, mysite, localBypassEnabled, localTestEmail }}
+>
   function setStatus(message) {
     const statusText = document.getElementById("statustext");
     if (statusText) {
@@ -72,8 +75,12 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
   function setEmail(email) {
     const anchorElement = document.getElementById("emailtext");
     if (anchorElement) {
-      anchorElement.setAttribute("href", "mailto:" + email + "?subject=Website Contact");
+      anchorElement.setAttribute(
+        "href",
+        "mailto:" + email + "?subject=Website Contact",
+      );
       anchorElement.innerText = email;
+      anchorElement.removeAttribute("tabindex");
     }
   }
 
@@ -137,7 +144,12 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
       setVerifyingState(false);
     }
   };
+</script>
 
+<script
+  is:inline
+  define:vars={{ localBypassEnabled, localTestEmail, sitekey, url, mysite }}
+>
   function onEmailClick() {
     const button = document.getElementById("emailBtn");
     if (button?.getAttribute("aria-busy") === "true") {
@@ -145,12 +157,25 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     }
 
     if (localBypassEnabled) {
-      setEmail(localTestEmail);
-      setStatus("Local test mode");
+      const anchorElement = document.getElementById("emailtext");
+      if (anchorElement) {
+        anchorElement.setAttribute(
+          "href",
+          "mailto:" + localTestEmail + "?subject=Website Contact",
+        );
+        anchorElement.innerText = localTestEmail;
+      }
+      const statusText = document.getElementById("statustext");
+      if (statusText) {
+        statusText.innerText = "Local test mode";
+      }
       return;
     }
 
-    setStatus("Verifying");
+    const statusText = document.getElementById("statustext");
+    if (statusText) {
+      statusText.innerText = "Verifying";
+    }
 
     const emailElement = document.getElementById("emailtext");
     if (emailElement) {
@@ -159,7 +184,9 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     }
 
     if (!sitekey || !url || !mysite) {
-      setStatus("Missing Turnstile configuration");
+      if (statusText) {
+        statusText.innerText = "Missing Turnstile configuration";
+      }
       return;
     }
 
@@ -170,12 +197,12 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 
     if (window.turnstile && window.turnstile.execute) {
       window.turnstile.execute("#turnstile-widget");
-    } else {
+    } else if (statusText) {
       if (button) {
         button.setAttribute("aria-busy", "false");
         button.removeAttribute("disabled");
       }
-      setStatus("Verification unavailable");
+      statusText.innerText = "Verification unavailable";
     }
   }
 
@@ -227,15 +254,15 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
   }
 
   .action:hover {
-    background: var(--action-hover-bg);
-    border-color: var(--action-hover-border);
+    background: #f4f1eb;
+    border-color: #b9ad99;
     color: var(--text);
     outline: none;
   }
 
   .action:focus-visible {
-    background: var(--action-hover-bg);
-    border-color: var(--action-hover-border);
+    background: #f4f1eb;
+    border-color: #b9ad99;
     color: var(--text);
     outline: 2px solid var(--text);
     outline-offset: 2px;
