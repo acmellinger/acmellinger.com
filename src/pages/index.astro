@@ -4,7 +4,7 @@ import Info from "../components/Info.astro";
 import Links from "../components/Links.astro";
 ---
 
-<Layout title={import.meta.env.NAME}>
+<Layout title={import.meta.env.NAME} description={import.meta.env.HEADING}>
   <main class="page">
     <section class="panel" aria-label="Profile">
       <Info name={import.meta.env.NAME} heading={import.meta.env.HEADING} />

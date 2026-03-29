@@ -15,7 +15,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 ---
 
 <div class="links-wrap">
-  <nav class="links" role="group" aria-label="Primary links">
+  <nav class="links" aria-label="Primary links">
     <button title="Reveal Email" aria-label="Reveal Email" id="emailBtn" class="action">
       <Icon name="mdi:email-fast-outline" class="icon" />
       <span>Email</span>
@@ -61,10 +61,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 >
 </div>
 
-<script
-  is:inline
-  define:vars={{ url, mysite, localBypassEnabled, localTestEmail }}
->
+<script is:inline define:vars={{ url, mysite, localBypassEnabled, localTestEmail, sitekey }}>
   function setStatus(message) {
     const statusText = document.getElementById("statustext");
     if (statusText) {
@@ -140,9 +137,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
       setVerifyingState(false);
     }
   };
-</script>
 
-<script is:inline define:vars={{ localBypassEnabled, localTestEmail, sitekey, url, mysite }}>
   function onEmailClick() {
     const button = document.getElementById("emailBtn");
     if (button?.getAttribute("aria-busy") === "true") {
@@ -150,25 +145,12 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     }
 
     if (localBypassEnabled) {
-      const anchorElement = document.getElementById("emailtext");
-      if (anchorElement) {
-        anchorElement.setAttribute(
-          "href",
-          "mailto:" + localTestEmail + "?subject=Website Contact",
-        );
-        anchorElement.innerText = localTestEmail;
-      }
-      const statusText = document.getElementById("statustext");
-      if (statusText) {
-        statusText.innerText = "Local test mode";
-      }
+      setEmail(localTestEmail);
+      setStatus("Local test mode");
       return;
     }
 
-    const statusText = document.getElementById("statustext");
-    if (statusText) {
-      statusText.innerText = "Verifying";
-    }
+    setStatus("Verifying");
 
     const emailElement = document.getElementById("emailtext");
     if (emailElement) {
@@ -177,9 +159,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     }
 
     if (!sitekey || !url || !mysite) {
-      if (statusText) {
-        statusText.innerText = "Missing Turnstile configuration";
-      }
+      setStatus("Missing Turnstile configuration");
       return;
     }
 
@@ -190,12 +170,12 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 
     if (window.turnstile && window.turnstile.execute) {
       window.turnstile.execute("#turnstile-widget");
-    } else if (statusText) {
+    } else {
       if (button) {
         button.setAttribute("aria-busy", "false");
         button.removeAttribute("disabled");
       }
-      statusText.innerText = "Verification unavailable";
+      setStatus("Verification unavailable");
     }
   }
 
@@ -246,12 +226,19 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     cursor: progress;
   }
 
-  .action:hover,
-  .action:focus-visible {
-    background: #f4f1eb;
-    border-color: #b9ad99;
+  .action:hover {
+    background: var(--action-hover-bg);
+    border-color: var(--action-hover-border);
     color: var(--text);
     outline: none;
+  }
+
+  .action:focus-visible {
+    background: var(--action-hover-bg);
+    border-color: var(--action-hover-border);
+    color: var(--text);
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
   }
 
   :global(.icon) {
