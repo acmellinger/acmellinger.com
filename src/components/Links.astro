@@ -16,7 +16,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
 
 <div class="links-wrap">
   <nav class="links" role="group" aria-label="Primary links">
-    <button title="Reveal Email" aria-label="Reveal Email" id="emailBtn" class="action">
+    <button aria-label="Reveal Email" id="emailBtn" class="action">
       <Icon name="mdi:email-fast-outline" class="icon" />
       <span>Email</span>
     </button>
@@ -34,7 +34,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     <a
       class="action"
       title="GitHub"
-      aria-label="My Github"
+      aria-label="My GitHub"
       target="_blank"
       rel="noopener noreferrer"
       href={github}
@@ -45,7 +45,7 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
   </nav>
 
   <div id="email-container" class="email-container" aria-live="polite">
-    <a id="emailtext" class="emailtext"></a>
+    <a id="emailtext" class="emailtext" tabindex="-1"></a>
     <span id="statustext" class="statustext"></span>
   </div>
 </div>
@@ -75,8 +75,12 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
   function setEmail(email) {
     const anchorElement = document.getElementById("emailtext");
     if (anchorElement) {
-      anchorElement.setAttribute("href", "mailto:" + email + "?subject=Website Contact");
+      anchorElement.setAttribute(
+        "href",
+        "mailto:" + email + "?subject=Website Contact",
+      );
       anchorElement.innerText = email;
+      anchorElement.removeAttribute("tabindex");
     }
   }
 
@@ -142,7 +146,10 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
   };
 </script>
 
-<script is:inline define:vars={{ localBypassEnabled, localTestEmail, sitekey, url, mysite }}>
+<script
+  is:inline
+  define:vars={{ localBypassEnabled, localTestEmail, sitekey, url, mysite }}
+>
   function onEmailClick() {
     const button = document.getElementById("emailBtn");
     if (button?.getAttribute("aria-busy") === "true") {
@@ -246,12 +253,19 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     cursor: progress;
   }
 
-  .action:hover,
-  .action:focus-visible {
+  .action:hover {
     background: #f4f1eb;
     border-color: #b9ad99;
     color: var(--text);
     outline: none;
+  }
+
+  .action:focus-visible {
+    background: #f4f1eb;
+    border-color: #b9ad99;
+    color: var(--text);
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
   }
 
   :global(.icon) {
