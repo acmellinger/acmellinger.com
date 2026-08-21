@@ -165,22 +165,25 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
   is:inline
   define:vars={{ localBypassEnabled, localTestEmail, sitekey, url, mysite }}
 >
+  let turnstileWidgetId = null;
+
   function loadTurnstile() {
     return new Promise((resolve, reject) => {
       if (window.turnstile) {
-        resolve();
+        resolve(window.turnstile);
         return;
       }
       let script = document.getElementById("turnstile-script");
       if (!script) {
         script = document.createElement("script");
         script.id = "turnstile-script";
-        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+        script.src =
+          "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
         script.async = true;
         script.defer = true;
         document.head.appendChild(script);
       }
-      script.addEventListener("load", () => resolve());
+      script.addEventListener("load", () => resolve(window.turnstile));
       script.addEventListener("error", () =>
         reject(new Error("Failed to load Turnstile")),
       );
@@ -233,12 +236,14 @@ const localTestEmail = import.meta.env.PUBLIC_TEST_EMAIL ?? "local@example.com";
     }
 
     loadTurnstile()
-      .then(() => {
-        if (window.turnstile && window.turnstile.execute) {
-          window.turnstile.execute("#turnstile-widget");
-        } else {
+      .then((turnstile) => {
+        if (!turnstile || !turnstile.render || !turnstile.execute) {
           throw new Error("Turnstile unavailable");
         }
+        if (turnstileWidgetId === null) {
+          turnstileWidgetId = turnstile.render("#turnstile-widget");
+        }
+        turnstile.execute("#turnstile-widget");
       })
       .catch(() => {
         if (button) {
